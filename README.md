@@ -44,6 +44,7 @@ the process
 * vagrant@precise64:~$ sudo apt-get install language-pack-ja postgresql libpq-dev python-dev python-pip python-virtualenv git-core openjdk-7-jdk libapache2-mod-wsgi tomcat7 postfix
 * vagrant@precise64:~$ sudo -u postgres psql -l
 make sure you have an output like:
+<pre>
 vagrant@precise64:~$ sudo -u postgres psql -l
                               List of databases
    Name    |  Owner   | Encoding | Collate |  Ctype  |   Access privileges   
@@ -54,4 +55,5 @@ vagrant@precise64:~$ sudo -u postgres psql -l
  template1 | postgres | UTF8     | C.UTF-8 | C.UTF-8 | =c/postgres          +
            |          |          |         |         | postgres=CTc/postgres
 (3 rows)
+</pre>
 !! the Encoding must be UTF8 not LATIN1. If not, you need to make sure your LC_ALL indicates the use of UTF-8.
