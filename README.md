@@ -17,8 +17,7 @@ ongoing 作業中
 
 references
 ----------
-* CKAN2.0日本語環境インストールマニュアル (Ubuntu12.04)
-TODO: URL を開示してよいか確認。
+* [CKAN2.0日本語環境インストールマニュアル (Ubuntu12.04)](https://docs.google.com/document/d/1gsrFF5IUwlabzQcoVzkfeM7VnwZ0XJUzvQOGhQVFfjw/edit?pli=1)
 
 environment
 -----------
@@ -31,20 +30,28 @@ the process
 * In VirtualBox, change the default VM folder (デフォルトの仮想マシンフォルダー) of VirtualBox -> 環境設定 if you want to save disk usage of your SSD drive (e.g. if you are running on MBA).
 * Install [Vagrant](http://downloads.vagrantup.com)
 * "export VAGRANT_HOME=/where/you/have/enough/space" on your .bash_profile if you want and source .bash_profile.
-* osx$ mkdir /your/work/directory
-* osx$ cd /your/work/directory
-* osx$ vagrant init precise64 http://files.vagrantup.com/precise64.box # download Vangrantfile to /your/work/directory
-* osx$ vagrant up # install Ubuntu 12.04 64 to your VirtualBox, and run it.
-* osx$ vagrant ssh # log in to the new Ubuntu 12.04
-* vagrant@precise64:~$ # now you get a shell access from your new Ubuntu 12.04
+
+```sh
+osx$ mkdir /your/work/directory
+osx$ cd /your/work/directory
+osx$ vagrant init precise64 http://files.vagrantup.com/precise64.box # download Vangrantfile to /your/work/directory
+osx$ vagrant up # install Ubuntu 12.04 64 to your VirtualBox, and run it.
+osx$ vagrant ssh # log in to the new Ubuntu 12.04
+vagrant@precise64:~$ # now you get a shell access from your new Ubuntu 12.04
+```
 
 ### Ubuntu 12.04 上で CKAN 2.0 をインストールする
+
+```sh
 * vagrant@precise64:~$ sudo apt-get update
 * vagrant@precise64:~$ sudo vi /etc/default/locale -> modify LC_ALL="C.UTF-8" (which is originally "en_US")
 * vagrant@precise64:~$ sudo apt-get install language-pack-ja postgresql libpq-dev python-dev python-pip python-virtualenv git-core openjdk-7-jdk libapache2-mod-wsgi tomcat7 postfix
 * vagrant@precise64:~$ sudo -u postgres psql -l
+```
+
 make sure you have an output like:
-<pre>
+
+```
 vagrant@precise64:~$ sudo -u postgres psql -l
                               List of databases
    Name    |  Owner   | Encoding | Collate |  Ctype  |   Access privileges   
@@ -55,5 +62,6 @@ vagrant@precise64:~$ sudo -u postgres psql -l
  template1 | postgres | UTF8     | C.UTF-8 | C.UTF-8 | =c/postgres          +
            |          |          |         |         | postgres=CTc/postgres
 (3 rows)
-</pre>
+```
+
 !! the Encoding must be UTF8 not LATIN1. If not, you need to make sure your LC_ALL indicates the use of UTF-8.
