@@ -65,3 +65,62 @@ vagrant@precise64:~$ sudo -u postgres psql -l
 ```
 
 !! the Encoding must be UTF8 not LATIN1. If not, you need to make sure your LC_ALL indicates the use of UTF-8.
+
+```sh
+vagrant@precise64:~$ sudo -u postgres createuser -S -D -R -P ckanuser
+Enter password for new role: (postgres)
+Enter it again: (postgres)
+vagrant@precise64:~$ sudo -u postgres createdb -O ckanuser ckantest
+vagrant@precise64:~$ sudo vi /etc/tomcat7/server.xml 
+```
+
+以下の部分を編集してUTF-8の設定をする。
+
+```xml
+<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000"
+ URIEncoding="UTF-8" setCharacterEncoding="UTF-8" redirectPort="8443" />
+```
+
+テスト用にポート開ける．
+
+```sh
+vagrant@precise64:~$ sudo ufw allow 8080
+```
+
+Solr をインストールする。
+
+```sh
+$ sudo mkdir /usr/local/jakarta
+$ cd /usr/local/jakarta 
+$ sudo wget http://ftp.jaist.ac.jp/pub/apache/lucene/solr/4.2.1/solr-4.2.1.tgz
+$ sudo mv solr-4.2.1.tgz solr-4.2.1.tar.gz
+$ sudo tar xvzf solr­4.21..tar.g
+$ sudo mkdir ../solr
+$ sudo cp -a solr-4.2.1/example/solr/* ../solr/
+$ sudo cp -a solr-4.2.1/contrib ../solr
+$ sudo cp -a solr-4.2.1/dist ../solr
+$ sudo chown -R tomcat7:tomcat7 ../solr/
+$ sudo vi /usr/local/solr/collection1/conf/solrconfig.xml 
+```
+
+72-82行目の../../..を/usr/local/solr/collection1に置換
+
+```sh
+$ sudo vi /etc/tomcat7/Catalina/localhost/solr.xml
+```
+
+以下の内容で新規作成する．
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Context docBase="/usr/local/solr/dist/solr-4.2.1.war" debug="0" crossContext="true">
+<Environment name="solr/home" type="java.lang.String" value="/usr/local/solr" override="true"/>
+</Context>
+```
+
+```sh
+$ sudo service tomcat7 restart
+$ w3m http://localhost:8080 # it works が出ていることを確認。
+$ sudo ufw deny 8080 # ポートを閉じる
+```
+
